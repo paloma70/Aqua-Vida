@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio | Aqua Vida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="encabezado">
+    <a class="marca" href="index.html" aria-label="Aqua Vida, inicio">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="32" r="30" fill="#37b5b0"/>
+        <path d="M12 32c8-12 20-14 30-6l10-8v24l-10-8c-10 8-22 6-30-6z" fill="#fff"/>
+        <circle cx="20" cy="30" r="2.5" fill="#0b4f5c"/>
+        <circle cx="50" cy="12" r="3" fill="#fff" opacity=".7"/>
+        <circle cx="55" cy="20" r="2" fill="#fff" opacity=".7"/>
+      </svg>
+      <h1>Aqua Vida</h1>
+    </a>
+    <nav>
+      <ul class="menu">
+        <li><a href="index.html" class="activo">Inicio</a></li>
+        <li><a href="peces.html" >Peces</a></li>
+        <li><a href="acuarios.html" >Acuarios</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="portada">
+      <h2>Bienvenido a Aqua Vida</h2>
+      <p>Peces, acuarios y todo lo que necesitas para darle vida al agua.</p>
+      <a class="boton" href="peces.html">Ver peces</a>
+    </section>
+
+    <h2 class="titulo">¿Qué encontrarás?</h2>
+    <section class="cositas">
+      <article class="cosita"><span>🐠</span><h3>Peces</h3><p>Ornamentales sanos y de colores.</p></article>
+      <article class="cosita"><span>🫧</span><h3>Acuarios</h3><p>De todos los tamaños.</p></article>
+      <article class="cosita"><span>🪸</span><h3>Decoración</h3><p>Plantas, rocas y adornos.</p></article>
+      <article class="cosita"><span>🥣</span><h3>Alimento</h3><p>Nutrición para cada especie.</p></article>
+    </section>
+
+    <h2 class="titulo">¿Por qué Aqua Vida?</h2>
+    <section class="cositas">
+      <article class="cosita"><span>✅</span><h3>Peces sanos</h3><p>Los revisamos antes de venderlos.</p></article>
+      <article class="cosita"><span>💬</span><h3>Asesoría</h3><p>Te ayudamos a armar tu primer acuario.</p></article>
+      <article class="cosita"><span>🚚</span><h3>Entregas</h3><p>Consulta por envíos cerca de ti.</p></article>
+    </section>
+
+    <h2 class="titulo">Visítanos</h2>
+    <section class="visita">
+      <div class="horario">
+        <h3>Horario</h3>
+        <p id="estado" class="estado">Calculando…</p>
+        <ul>
+          <li><b>Lunes a viernes:</b> 8:00 am – 6:00 pm</li>
+          <li><b>Sábados:</b> 9:00 am – 4:00 pm</li>
+          <li><b>Domingos:</b> cerrado</li>
+        </ul>
+        <button class="boton" id="btnRuta" type="button">📍 Cómo llegar desde mi ubicación</button>
+        <p id="msgRuta" class="nota"></p>
+      </div>
+      <div class="mapa">
+        <iframe title="Ubicación de Aqua Vida" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://maps.google.com/maps?q=Bucaramanga%2C%20Santander%2C%20Colombia&amp;z=14&amp;output=embed"></iframe>
+      </div>
+    </section>
+    <script>
+      // 
+      const DIRECCION = "Bucaramanga, Santander, Colombia";
+      // Estado abierto/cerrado según la hora del visitante
+      (function(){
+        const h = new Date(), d = h.getDay(), m = h.getHours()*60 + h.getMinutes();
+        const rango = d>=1 && d<=5 ? [480,1080] : d===6 ? [540,960] : null;
+        const el = document.getElementById("estado");
+        const abierto = rango && m>=rango[0] && m<rango[1];
+        el.textContent = abierto ? "🟢 Abierto ahora" : "🔴 Cerrado ahora";
+        el.className = "estado " + (abierto ? "si" : "no");
+      })();
+      // API de geolocalización del navegador
+      document.getElementById("btnRuta").addEventListener("click", function(){
+        const msg = document.getElementById("msgRuta");
+        const destino = encodeURIComponent(DIRECCION);
+        if(!navigator.geolocation){
+          window.open("https://www.google.com/maps/dir/?api=1&destination="+destino,"_blank");
+          return;
+        }
+        msg.textContent = "Buscando tu ubicación…";
+        navigator.geolocation.getCurrentPosition(function(p){
+          msg.textContent = "";
+          window.open("https://www.google.com/maps/dir/?api=1&origin="+p.coords.latitude+","+p.coords.longitude+"&destination="+destino,"_blank");
+        }, function(){
+          msg.textContent = "No pudimos obtener tu ubicación; te mostramos la tienda.";
+          window.open("https://www.google.com/maps/dir/?api=1&destination="+destino,"_blank");
+        });
+      });
+    </script>
+  </main>
+  <footer class="pie">
+    <div>
+      <h3>Aqua Vida</h3>
+      <p>Todo para tus peces y acuarios</p>
+    </div>
+    <div>
+      <h3>Contáctanos</h3>
+       <p>📞 Tel: <a href="tel:+570000000000" style="display:inline">+57 319 559 9999 </a></p>
+      <a href="https://instagram.com/tu_usuario" target="_blank" rel="noopener">📸 Instagram: @aquavida</a>
+      <p>📍 Calle 50 # 67-67, Bucaramanga</p>
+    </div>
+    <small>© 2026 Aqua Vida. Todos los derechos reservados.</small>
+  </footer>
+</body>
+</html>
